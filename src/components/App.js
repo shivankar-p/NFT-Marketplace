@@ -15,6 +15,8 @@ import { Route, Switch } from 'react-router';
 import Home from './layouts/Home';
 import Create from './layouts/Create';
 import Show from './layouts/Show';
+const IPFS = require('ipfs-mini');
+const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
 
 const App = () => {
     const dispatch = useDispatch();
@@ -60,6 +62,37 @@ const App = () => {
         dispatch(fetchData());
     },[Tezos, dispatch]);
 
+    var listhashes = [];
+    var ipfs_hash="";
+     ipfs.addJSON({ somevalue: 2, name: 'Nick' }).then(async (result) => {
+        // listhashes.append(result);
+        console.log(result);
+        ipfs_hash = result;
+        const messageString = await fetchText(`https://ipfs.io/ipfs/${ipfs_hash}`);
+        console.log(messageString)
+     })
+
+    // ipfs.catJSON('QmYzWWCvYhqU6d5VvRvVwgbpqM9J3HH8TMbns9UvFSSvBf').then(console.log).catch(console.log);
+    // fetch("https://ipfs.io/ipfs/"+ipfs_hash)
+    // sleep(1)
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    // await new Promise(r => setTimeout(r, 1000));
+    sleep(1000)
+    console.log(ipfs_hash)
+    
+    async function fetchText(url) {
+        const response = await fetch(url);
+        return response.text();
+    }
+
+    
+
+    // message = await fetch("https://ipfs.io/ipfs/QmYzWWCvYhqU6d5VvRvVwgbpqM9J3HH8TMbns9UvFSSvBf");
+
+
+    
     return (
         <div className="ui container">
             <Header Tezos={Tezos} setTezos={setTezos} wallet={wallet} />
