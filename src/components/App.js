@@ -13,7 +13,7 @@ import { register_org } from '../actions';
 import User from './layouts/User'
 
 function App() {
-	register_org("iiitb", "gmail");
+	// register_org("iiitb", "gmail");
 	return (
 		<>
 			<Router>

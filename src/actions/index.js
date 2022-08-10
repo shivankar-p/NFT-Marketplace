@@ -142,12 +142,12 @@ export const collectNFT = ({ Tezos, amount, id }) => {
 };
 
 
-export const register_org = async ({company_name , company_email}) => {
-	var jsondata = await fetchText(`https://ipfs.io/ipfs/${ipfs_hash}`);
-	console.log(jsondata)
-	console.log(jsondata.length)
-	var data_len = Object.keys(jsondata).length
-	console.log(data_len)
+// export const register_org = async ({company_name , company_email}) => {
+// 	var jsondata = await fetchText(`https://ipfs.io/ipfs/${ipfs_hash}`);
+// 	console.log(jsondata)
+// 	console.log(jsondata.length)
+// 	var data_len = Object.keys(jsondata).length
+// 	console.log(data_len)
 
 
-}
+// }

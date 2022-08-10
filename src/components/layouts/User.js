@@ -11,11 +11,16 @@ import {
 } from "@airgap/beacon-sdk";
 
 import { fetchData, _walletConfig } from '../../actions';
-import { Routes, Route, Switch } from 'react-router-dom';
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Link
+} from "react-router-dom";
 import Home from './Home';
 import Create from './Create';
 import Show from './Show';
-import Contests from './Contests';
+import Contest from './Contest';
 
 const User = () => {
     const dispatch = useDispatch();
@@ -65,20 +70,19 @@ const User = () => {
         <div className="ui container">
             <Header Tezos={Tezos} setTezos={setTezos} wallet={wallet} />
             <div className="ui container">
-                <Switch>
-                    <Route path="/user/contests">
-                        <Contests Tezos={Tezos}/>
+            <Router>
+				<Switch>
+					<Route exact path="/"
+						component={Home}/>
+                    <Route exact path="/contests" component={Contest}>
                     </Route>
-                    <Route path="/user/create">
-                        <Create Tezos={Tezos}/>
+                    <Route exact path="/create" component={Create}>
                     </Route>
-                    <Route path="/user/show/:id">
-                        <Show Tezos={Tezos}/>
+                    <Route exact path="/user/show/:id" component={Show}>
                     </Route>
-                    <Route path="/user">
-                        <Home Tezos={Tezos}/>
-                    </Route>
-                </Switch>
+				</Switch>
+			</Router>
+
             </div>
         </div>
     );
