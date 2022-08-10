@@ -1,7 +1,10 @@
 import { TezosToolkit } from "@taquito/taquito";
-import { NetworkType } from "@airgap/beacon-sdk";
 import config from "../config";
 import axios from "axios";
+
+const IPFS = require('ipfs-mini');
+const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+var hash = "QmcGRLkvb8b3suagMxrraDzwm6oTXsVEKcrFG2kGUaGW4a";
 
 export const connectWallet = ({ wallet, Tezos }) => {
 	return async (dispatch) => {
@@ -137,3 +140,14 @@ export const collectNFT = ({ Tezos, amount, id }) => {
 		}
 	};
 };
+
+
+export const register_org = async ({company_name , company_email}) => {
+	var jsondata = await fetchText(`https://ipfs.io/ipfs/${ipfs_hash}`);
+	console.log(jsondata)
+	console.log(jsondata.length)
+	var data_len = Object.keys(jsondata).length
+	console.log(data_len)
+
+
+}

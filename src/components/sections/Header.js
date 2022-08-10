@@ -19,11 +19,16 @@ const Header = ({Tezos, wallet, setTezos}) => {
     return (
             <div className="ui menu black" style={{'marginTop':'5px'}}>
                 <a href="/#" className="ui header item">NFTs</a>
-                <Link className="item" to="/">Home</Link>
+                <Link className="item" to="/user">Home</Link>
 
                 {selector.userAddress!==""?
-                <Link className="item" to="/create">Create NFT</Link>
+                <Link className="item" to="/user/create">Create NFT</Link>
                 :null}
+
+                {selector.userAddress!==""?
+                <Link className="item" to="user/contests">Contests</Link>
+                :null}
+
 
                 <div className="right menu">
                     {(selector.userAddress==="")?
