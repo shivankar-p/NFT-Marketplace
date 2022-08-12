@@ -16,4 +16,8 @@ npm start
 
 Complete description about the project can be found here : https://docs.google.com/document/d/1_Df0_Kbxkoo2BxqseLVDPpRx0ktdhYKXjVxQ08E0Nqc/edit?usp=sharing
 
+Youtube Demo Link : https://youtu.be/69LRfgo7HLA
+
+Live Website : https://nft-tez-mplace.netlify.app/
+
 
