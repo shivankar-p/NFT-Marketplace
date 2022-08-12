@@ -1,16 +1,77 @@
-import React, { useState } from "react";
+//import React, { useState } from "react";
 import { useFilePicker } from "use-file-picker";
 import { NFTStorage, File } from "nft.storage";
 
 import { mintNFT } from "../../actions";
 import { useDispatch } from "react-redux";
 
+import { TezosToolkit} from "@taquito/taquito";
+
+import React,{ useState, useEffect } from 'react';
+import Header from '../sections/Header';
+//import { useDispatch } from 'react-redux';
+//import { TezosToolkit} from "@taquito/taquito";
+import { BeaconWallet } from "@taquito/beacon-wallet";
+import {
+  NetworkType,
+  BeaconEvent,
+  defaultEventCallbacks,
+  ColorMode
+} from "@airgap/beacon-sdk";
+
+import { fetchData, _walletConfig } from '../../actions';
+
+
 const apiKey =
 	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDI3QkQxYjBlYzI3OTJkRGY3MjE0REEzMmQ2QzQzMzAwOTZBOTBkQjEiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1OTUzNDM3OTI1NiwibmFtZSI6ImZpcnN0X2tleSJ9.onHs5ZdqXcp9COCKpMSd6oDo69hRbTpAUSdc93BIexg";
 const client = new NFTStorage({ token: apiKey });
 
-const Create = ({ Tezos }) => {
-    const dispatch = useDispatch();
+const Create = () => {
+	
+	const dispatch = useDispatch();
+    const [Tezos, setTezos] = useState(
+        new TezosToolkit("https://jakartanet.smartpy.io/")
+    );
+    const [wallet, setWallet] = useState(null);
+
+    useEffect(()=>{
+        (async () => {
+            const wallet_instance = new BeaconWallet({
+                name: "NFT marketplace",
+                preferredNetwork: NetworkType.JAKARTANET,
+                colorMode: ColorMode.LIGHT,
+                disableDefaultEvents: false, // Disable all events / UI. This also disables the pairing alert.
+                eventHandlers: {
+                // To keep the pairing alert, we have to add the following default event handlers back
+                [BeaconEvent.PAIR_INIT]: {
+                    handler: defaultEventCallbacks.PAIR_INIT
+                },
+                [BeaconEvent.PAIR_SUCCESS]: {
+                    handler: data => { return (data.publicKey);}
+                }
+                }
+            });
+            Tezos.setWalletProvider(wallet_instance);
+            const activeAccount = await wallet_instance.client.getActiveAccount();
+            if (activeAccount) {
+                const userAddress = await wallet_instance.getPKH();
+                const balance = await Tezos.tz.getBalance(userAddress);
+                dispatch(_walletConfig(
+                    {
+                        userAddress: userAddress, 
+                        balance: balance.toNumber()
+                    }));
+            }
+            setWallet(wallet_instance);
+        })();
+    },[Tezos, dispatch]);
+
+
+    useEffect(()=>{
+        dispatch(fetchData());
+    },[Tezos, dispatch]);
+
+    //const dispatch = useDispatch();
 	const [openFileSelector, { filesContent }] = useFilePicker({
 		accept: [".png", ".jpg", ".jpeg", ".gif"],
 		multiple: false,
